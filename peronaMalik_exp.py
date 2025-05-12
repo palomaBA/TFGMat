@@ -8,6 +8,15 @@ import time
 import cv2 as cv
 
 def anisoexp(inimage_path, iterations, K):
+    """Función que aplica la difusión anisotrópica de Perona-Malik a una imagen.
+    
+    Attributes:
+        inimage_path (str): Ruta de la imagen a procesar.
+        iterations (int): Número de iteraciones.
+        K (float): Parámetro K para la difusión.
+    Returns:
+        numpy.ndarray: Imagen procesada.
+    """
     # Cargar imagen en escala de grises y convertir a float
     outimage = imread(inimage_path, pilmode='L').astype(np.float64)
     m, n = outimage.shape

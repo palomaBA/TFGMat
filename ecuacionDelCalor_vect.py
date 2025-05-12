@@ -7,6 +7,17 @@ import time
 import os
 
 def difusion_isotropica(r, t, nb_foto, pasos=False, nomostrar=False):
+    """Función que aplica la ecuación del calor a una imagen.
+
+    Attributes:
+        r (float): Paso de tiempo.
+        t (float): Tiempo total de difusión.
+        nb_foto (str): Nombre de la imagen a procesar.
+        pasos (bool): Si True, muestra los pasos intermedios.
+        nomostrar (bool): Si True, no muestra la imagen final.
+    Returns:
+        numpy.ndarray: Imagen procesada.
+    """
     print("Empieza el programa")
     print("Bordes estáticos")
     if pasos:

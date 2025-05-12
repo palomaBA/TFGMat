@@ -8,11 +8,20 @@ import time
 import cv2 as cv
 
 def anisofrac(inimage_path, iterations, K):
-    # Load grayscale image and convert to float
+    """Función que aplica la difusión anisotrópica de Perona-Malik a una imagen con función fraccional.
+
+    Attributes:
+        inimage_path (str): Ruta de la imagen a procesar.
+        iterations (int): Número de iteraciones.
+        K (float): Parámetro K para la difusión.
+    Returns:
+        numpy.ndarray: Imagen procesada.
+    """
+    # Cargar imagen en escala de grises y convertir a float
     outimage = imread(inimage_path, pilmode='L').astype(np.float64)
     m, n = outimage.shape
 
-    # Discretization parameters
+    # Parámetros de discretización
     deltax = 1 / (m - 1)
     deltay = 1 / (n - 1)
     deltamin = min(deltax, deltay)
@@ -22,21 +31,21 @@ def anisofrac(inimage_path, iterations, K):
     sy = deltat / (deltay ** 2)
 
     for _ in range(iterations):
-        # South and east differences
+        
         diffY1 = np.zeros_like(outimage)
         diffY1[:-1, :] = outimage[1:, :] - outimage[:-1, :]
 
         diffX1 = np.zeros_like(outimage)
         diffX1[:, :-1] = outimage[:, 1:] - outimage[:, :-1]
 
-        # North and west differences
+        
         diffY2 = np.zeros_like(outimage)
         diffY2[1:, :] = -diffY1[:-1, :]
 
         diffX2 = np.zeros_like(outimage)
         diffX2[:, 1:] = -diffX1[:, :-1]
 
-        # Fractional conductivity function
+        
         g1 = 1 / (1 + ((np.sqrt((diffX1/deltax)**2 + (diffY1/deltay)**2)) / (K/deltamin))**2)
         fluxY1 = diffY1 * g1
         fluxX1 = diffX1 * g1
@@ -45,7 +54,7 @@ def anisofrac(inimage_path, iterations, K):
         fluxY2 = diffY2 * g2
         fluxX2 = diffX2 * g2
 
-        # Update image
+        
         outimage += sy * (fluxY1 + fluxY2) + sx * (fluxX1 + fluxX2)
 
     return outimage
